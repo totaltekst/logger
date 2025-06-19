@@ -3,6 +3,7 @@
 namespace Totaltekst\Logger;
 
 
+use Exception;
 use Monolog\Logger;
 use Monolog\Handler\ErrorLogHandler;
 use Monolog\Level;
@@ -15,14 +16,11 @@ use Google\Cloud\Logging\PsrLogger;
 class Log
 {
     private static PsrLogger|Logger $logger;
-
     private static string $name;
-
     private static Level $level;
 
     public function __construct()
     {
-
     }
 
     /**
@@ -31,21 +29,30 @@ class Log
      * @param string         $name
      * @param \Monolog\Level $level
      * @param string         $channel (use 'errorlog' fpr local dev logging, 'google' for logging in google)
+     * @param string|null    $google_project_id
      *
      * @return void
+     * @throws \Exception
      */
-    static public function init_logger(string $name, Level $level = Level::Debug, string $channel = 'errorlog'): void
+    static public function init_logger(string $name, Level $level = Level::Debug, string $channel = 'errorlog', ?string $google_project_id = null): void
     {
         self::$level = $level;
         self::$name = $name;
 
         if ($channel === 'google') {
+            if ($google_project_id) {
+                $err = 'Google project id is not set!';
+                $err .= 'To log to Google logging, please provide the google project id.';
+                throw new Exception($err);
+            }
             self::$logger = (new LoggingClient([
-                'projectId' => getenv('GOOGLE_PROJECT_ID')
+                'projectId' => $google_project_id
             ]))->psrLogger($name);
-        } else {
+        } elseif ($channel === 'errorlog') {
             self::$logger = new Logger($name);
             self::getLogger()->pushHandler(new ErrorLogHandler(0, $level));
+        } else {
+            throw new Exception('Un-supported log channel: ' . $channel);
         }
     }
 
@@ -61,7 +68,6 @@ class Log
 
         return self::$logger;
     }
-
 
     /**
      * @param string $message
