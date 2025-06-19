@@ -1,0 +1,30 @@
+{
+    "name": "totaltekst/logger",
+    "description": "A package for logging",
+    "keywords": ["log", "logging"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Finn Johansen",
+            "email": "finn@totaltekst.no"
+        }
+    ],
+    "require": {
+        "php": "^8.0",
+        "google/cloud-logging": "^1.32",
+        "monolog/monolog": "^3.9"
+    },
+    "require-dev": {
+
+    },
+    "autoload": {
+        "psr-4": {
+            "Totaltekst\\Logger\\": "src/"
+        }
+    },
+    "autoload-dev": {
+    },
+    "config": {
+        "preferred-install": "dist"
+    }
+}
