@@ -1,0 +1,1 @@
+# Totaltekst logger
