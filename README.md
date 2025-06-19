@@ -1,4 +1,5 @@
 # Totaltekst logger
+
 ## Enables logging through monolog or Google logs
 
 ## Installation
@@ -14,5 +15,15 @@ composer require totaltekst/logger
 ```php
 <?php
 
-// To be continued
+use Totaltekst\Logger\Log;
+
+// Setup to use google logger, level DEBUG
+Log::init_logger('my_app_name', Level::Debug, 'google');
+
+// Write to the log using static methods:
+Log::alert('Starting up my app', ["data" => $args]);
+# 
+# 
+Log::info('Shutting down');
+
 ```
